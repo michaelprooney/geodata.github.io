@@ -16,7 +16,7 @@ async function main(): Promise<void> {
   const data = (await res.json()) as Array<Player>;
   const barchart = Plot.plot({
     title: "gh pages branch take two",
-    subtitle: "Nikola Jokic is Elite! Field goals made & attempted in 2022-23",
+    subtitle: "Mike Ryan and Nikola Jokic are Elite! Field goals made & attempted in 2022-23",
     width: 640,
     grid: true,
     x: {
