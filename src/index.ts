@@ -15,7 +15,7 @@ async function main(): Promise<void> {
   const res = await fetch("data/players_2023.json");
   const data = (await res.json()) as Array<Player>;
   const barchart = Plot.plot({
-    title: "hEy wORLD?????",
+    title: "gh pages branch tho",
     subtitle: "Field goals made & attempted in 2022-23",
     width: 640,
     grid: true,
@@ -37,7 +37,7 @@ async function main(): Promise<void> {
           x: "fga",
           y: "fgm",
           title: (d) => `${d.player_name}\n${d.team_abbreviation}`,
-        }),
+        })
       ),
       Plot.ruleY([0]),
     ],
