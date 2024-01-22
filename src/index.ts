@@ -83,7 +83,7 @@ async function main(): Promise<void> {
   const barchart = Plot.plot({
     title: "Lichess Openings",
     subtitle: "Most common openings used in Lichess",
-    marginTop: 250,
+    marginTop: 100,
     width: 640,
     grid: true,
     x: {
