@@ -71,7 +71,7 @@ async function main(): Promise<void> {
     marginLeft: 250,
     marks: [
       Plot.barX(filteredData, {
-        x: "count" , y: "opening_name", fill: "opening_name", tip: true, sort: {y: "-x"}}),
+        x: "count" , y: "opening_name", fill: "opening_name", tip: true}),
       Plot.ruleX([0]),
       //Plot.axisLeft(yScale).tickSize(0)
     ]
