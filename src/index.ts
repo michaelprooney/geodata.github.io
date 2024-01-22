@@ -32,33 +32,73 @@ interface Games {
   opening_ply: string;
 }
 
+function getTopFieldValues(data: Games[], field: keyof Games, topCount: number): {
+  [x: string]: string | number;
+  count: number;
+}[] {
+  const fieldCounts: Record<string, number> = {};
+
+  // Count occurrences of the specified field
+  data.forEach((item) => {
+    const fieldValue = item[field];
+    fieldCounts[fieldValue] = (fieldCounts[fieldValue] || 0) + 1;
+  });
+
+  // Convert the counts into an array of objects
+  const fieldCountArray = Object.entries(fieldCounts).map(([value, count]) => ({ [field]: value, count }));
+
+  // Sort the array by count in descending order
+  fieldCountArray.sort((a, b) => b.count - a.count);
+
+  // Take the top N field values
+  const topFieldValues = fieldCountArray.slice(0, topCount);
+
+  return topFieldValues;
+}
+
 async function main(): Promise<void> {
-  const res = await fetch("data/players_2023.json");
-  const data = (await res.json()) as Array<Player>;
+  const chess: Array<Games> = await d3.csv("data/Lichess.csv");
+  //const data = (await res.json()) as Array<Player>;
+
+  const filteredData = getTopFieldValues(chess, "opening_name", 20)
+
+  const sideways = Plot.plot({
+    height: 240,
+    color: {legend: true},
+    // y: {
+    //   domain: d3.sort(filteredData, d => -d.count).map(d => d.opening_name)
+    // },
+    marginLeft: 250,
+    marks: [
+      Plot.barX(filteredData, {
+        x: "count" , y: "opening_name", fill: "opening_name", tip: true}),
+      Plot.ruleX([0]),
+      //Plot.axisLeft(yScale).tickSize(0)
+    ]
+  })
+  
+  document.querySelector("#plot")?.append(sideways);
+
+
   const barchart = Plot.plot({
-    title: "NBA Shooting",
-    subtitle: "Field goals attempted & attempted in 2022-23",
+    title: "Lichess Openings",
+    subtitle: "Most common openings used in Lichess",
+    marginTop: 250,
     width: 640,
     grid: true,
     x: {
-      label: "field goals attempted",
+      label: "Opening Play Index",
     },
     y: {
-      label: "field goals made",
+      label: "frequency",
     },
     marks: [
-      Plot.dot(data, {
-        x: "fga",
-        y: "fgm",
-        fill: "team_abbreviation",
-      }),
+      Plot.barY(chess, Plot.groupX({
+        y: "count"} , //title: (elems: string | any[]) => `${elems.length} games` }, 
+        {x: d => Number(d.opening_ply)})),
       Plot.tip(
-        data,
-        Plot.pointer({
-          x: "fga",
-          y: "fgm",
-          title: (d) => `${d.player_name}\n${d.team_abbreviation}`,
-        }),
+        [`Most opening sequences are three moves in duration.`],
+        {x: 3, y: 3490, dy: 3, anchor: "bottom"}
       ),
       Plot.ruleY([0]),
     ],
@@ -66,7 +106,7 @@ async function main(): Promise<void> {
   
   document.querySelector("#plot")?.append(barchart);
 
-  const chess: Array<Games> = await d3.csv("data/Lichess.csv");
+  // const chess: Array<Games> = await d3.csv("data/Lichess.csv");
 
   const differences = chess.map(d => ({
     difference: Math.abs(Number(d.white_rating) - Number(d.black_rating)),
