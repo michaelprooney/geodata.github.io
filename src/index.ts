@@ -63,7 +63,14 @@ async function main(): Promise<void> {
   const filteredData = getTopFieldValues(chess, "opening_name", 20)
 
   const sideways = Plot.plot({
+    title: "Top 20 Most Popular Chess Openings",
     height: 240,
+    x: {
+      label: "Name of Openings",
+    },
+    y: {
+      label: "Games Used",
+    },
     //color: {legend: true},
     // y: {
     //   domain: d3.sort(filteredData, d => -d.count).map(d => d.opening_name)
@@ -71,7 +78,7 @@ async function main(): Promise<void> {
     marginLeft: 250,
     marks: [
       Plot.barX(filteredData, {
-        x: "count" , y: "opening_name", fill: "opening_name", tip: true}),
+        x: "count" , y: "opening_name", fill: "opening_name", tip: true, sort: {y: "-x"}}),
       Plot.ruleX([0]),
       //Plot.axisLeft(yScale).tickSize(0)
     ]
@@ -81,13 +88,12 @@ async function main(): Promise<void> {
 
 
   const barchart = Plot.plot({
-    title: "Lichess Openings",
-    subtitle: "Most common openings used in Lichess",
+    title: "Openings Sequences Length",
     marginTop: 100,
     width: 640,
     grid: true,
     x: {
-      label: "Opening Play Index",
+      label: "# of moves",
     },
     y: {
       label: "frequency",
@@ -95,9 +101,9 @@ async function main(): Promise<void> {
     marks: [
       Plot.barY(chess, Plot.groupX({
         y: "count"} , //title: (elems: string | any[]) => `${elems.length} games` }, 
-        {x: d => Number(d.opening_ply)})),
+        {x: d => Number(d.opening_ply), tip: true})),
       Plot.tip(
-        [`Most opening sequences are three moves in duration.`],
+        [`Most opening sequences are 3 moves in duration.`],
         {x: 3, y: 3490, dy: 3, anchor: "bottom"}
       ),
       Plot.ruleY([0]),
@@ -118,10 +124,16 @@ async function main(): Promise<void> {
 
   
   const scatter = Plot.plot({
+    title: "Games Outcomes and Difference in Ratings",
     marginLeft: 60,
-    x: {inset: 10},
     color: {legend: true},
-    y: {label: null },
+    x: {
+      inset: 10,
+      label: "# of moves",
+    },
+    y: {
+      label: "frequency",
+    },
     marks: [
       Plot.dot(differences, {
         x: "difference", 
