@@ -129,10 +129,10 @@ async function main(): Promise<void> {
     color: {legend: true},
     x: {
       inset: 10,
-      label: "# of moves",
+      label: "Rating Differential",
     },
     y: {
-      label: "frequency",
+      label: null,
     },
     marks: [
       Plot.dot(differences, {
