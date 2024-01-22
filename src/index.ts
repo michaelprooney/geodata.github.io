@@ -64,14 +64,14 @@ async function main(): Promise<void> {
 
   const sideways = Plot.plot({
     height: 240,
-    color: {legend: true},
+    //color: {legend: true},
     // y: {
     //   domain: d3.sort(filteredData, d => -d.count).map(d => d.opening_name)
     // },
     marginLeft: 250,
     marks: [
       Plot.barX(filteredData, {
-        x: "count" , y: "opening_name", fill: "opening_name", tip: true}),
+        x: "count" , y: "opening_name", fill: "opening_name", tip: true, sort: {y: "-x"}}),
       Plot.ruleX([0]),
       //Plot.axisLeft(yScale).tickSize(0)
     ]
