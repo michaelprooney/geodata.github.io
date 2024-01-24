@@ -65,10 +65,10 @@ async function main(): Promise<void> {
   const sideways = Plot.plot({
     title: "Top 20 Most Popular Chess Openings",
     height: 240,
-    x: {
+    y: {
       label: "Name of Openings",
     },
-    y: {
+    x: {
       label: "Games Used",
     },
     //color: {legend: true},
@@ -156,7 +156,7 @@ async function main(): Promise<void> {
     
   })
 
-  document.querySelector("#plot")?.append(scatter);
+  document.querySelector("#after")?.append(scatter);
 }
 
 window.addEventListener("DOMContentLoaded", async (_evt) => {
