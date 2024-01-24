@@ -78,7 +78,7 @@ async function main(): Promise<void> {
     x: {
       label: "Games Used",
     },
-    //color: {legend: true},
+    color: {legend: true},
     // y: {
     //   domain: d3.sort(filteredData, d => -d.count).map(d => d.opening_name)
     // },
