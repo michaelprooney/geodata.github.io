@@ -37,15 +37,22 @@ function getTopFieldValues(data: Games[], field: keyof Games, topCount: number):
   count: number;
 }[] {
   const fieldCounts: Record<string, number> = {};
+  const fieldSums: Record<string, number> = {}; // New record to store the sum of opening_ply for each field
+  const fieldAverage: Record<string, number> = {};
 
   // Count occurrences of the specified field
   data.forEach((item) => {
     const fieldValue = item[field];
+    const openingPly = Number(item['opening_ply']);
     fieldCounts[fieldValue] = (fieldCounts[fieldValue] || 0) + 1;
+    fieldSums[fieldValue] = (fieldSums[fieldValue] || 0) + openingPly;
   });
 
   // Convert the counts into an array of objects
-  const fieldCountArray = Object.entries(fieldCounts).map(([value, count]) => ({ [field]: value, count }));
+  const fieldCountArray = Object.entries(fieldCounts).map(([value, count]) => { 
+    const average = fieldSums[value] / count;
+    return {[field]: value, count, average};
+  });
 
   // Sort the array by count in descending order
   fieldCountArray.sort((a, b) => b.count - a.count);
@@ -78,7 +85,7 @@ async function main(): Promise<void> {
     marginLeft: 250,
     marks: [
       Plot.barX(filteredData, {
-        x: "count" , y: "opening_name", fill: "opening_name", tip: true, sort: {y: "-x"}}),
+        x: "count" , y: "opening_name", fill: "average", tip: true, sort: {y: "-x"}}),
       Plot.ruleX([0]),
       //Plot.axisLeft(yScale).tickSize(0)
     ]
