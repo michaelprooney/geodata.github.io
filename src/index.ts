@@ -13,58 +13,71 @@ import * as d3 from 'd3';
 //   playoff_mpg: number;
 // }
 
-interface Games {
-  id: string;
-  rated: string;
-  created_at: string;
-  last_move_at: string;
-  turns: string;
-  victory_status: string;
-  winner: string;
-  increment_code: string;
-  white_id: string;
-  white_rating: string;
-  black_id: string;
-  black_rating: string;
-  moves: string;
-  opening_eco: string;
-  opening_name: string;
-  opening_ply: string;
+interface Population {
+  id: string,
+  number: string,
+  admin_division: string,
+  pop_2020: string,
+  pop_2010: string,
+  pop_2000: string,
+  pop_1990: string,
+  pop_1982: string,
+  pop_1964: string,
+  pop_1954: string,
+  pop_1947: string,
+  pop_1937: string,
+  pop_1928: string,
+  pop_1912: string,
+  p_12_28: string,
+  p_28_37: string,
+  p_37_47: string,
+  p_47_54:string,
+  p_54_64: string,
+  p_64_82: string,
+  p_82_90: string,
+  p_90_00: string,
+  p_00_10: string,
+  p_10_20: string,
+  non_zero: string,
+  average: string,
 }
 
-function getTopFieldValues(data: Games[], field: keyof Games, topCount: number): {
-  [x: string]: string | number;
-  count: number;
-}[] {
-  const fieldCounts: Record<string, number> = {};
-  const fieldSums: Record<string, number> = {}; // New record to store the sum of opening_ply for each field
-  const fieldAverage: Record<string, number> = {};
+// function getTopFieldValues(data: Games[], field: keyof Games, topCount: number): {
+//   [x: string]: string | number;
+//   count: number;
+// }[] {
+//   const fieldCounts: Record<string, number> = {};
+//   const fieldSums: Record<string, number> = {}; // New record to store the sum of opening_ply for each field
+//   const fieldAverage: Record<string, number> = {};
 
-  // Count occurrences of the specified field
-  data.forEach((item) => {
-    const fieldValue = item[field];
-    const openingPly = Number(item['opening_ply']);
-    fieldCounts[fieldValue] = (fieldCounts[fieldValue] || 0) + 1;
-    fieldSums[fieldValue] = (fieldSums[fieldValue] || 0) + openingPly;
-  });
+//   // Count occurrences of the specified field
+//   data.forEach((item) => {
+//     const fieldValue = item[field];
+//     const openingPly = Number(item['opening_ply']);
+//     fieldCounts[fieldValue] = (fieldCounts[fieldValue] || 0) + 1;
+//     fieldSums[fieldValue] = (fieldSums[fieldValue] || 0) + openingPly;
+//   });
 
-  // Convert the counts into an array of objects
-  const fieldCountArray = Object.entries(fieldCounts).map(([value, count]) => { 
-    const average = fieldSums[value] / count;
-    return {[field]: value, count, ["Average # of moves per opening"]:average};
-  });
+//   // Convert the counts into an array of objects
+//   const fieldCountArray = Object.entries(fieldCounts).map(([value, count]) => { 
+//     const average = fieldSums[value] / count;
+//     return {[field]: value, count, ["Average # of moves per opening"]:average};
+//   });
 
-  // Sort the array by count in descending order
-  fieldCountArray.sort((a, b) => b.count - a.count);
+//   // Sort the array by count in descending order
+//   fieldCountArray.sort((a, b) => b.count - a.count);
 
-  // Take the top N field values
-  const topFieldValues = fieldCountArray.slice(0, topCount);
+//   // Take the top N field values
+//   const topFieldValues = fieldCountArray.slice(0, topCount);
 
-  return topFieldValues;
-}
+//   return topFieldValues;
+// }
 
 async function main(): Promise<void> {
-  const chess: Array<Games> = await d3.csv("data/Lichess.csv");
+  const population_2020: Map<number, number> = new Map(((await d3.csv("data/Chinese_pop_province_iso.csv")).map(d => [+d.number, +d.pop_2020])));
+  console.log(population_2020);
+  const population_2010: Map<number, number> = new Map(((await d3.csv("data/Chinese_pop_province_iso.csv")).map(d => [+d.number, +d.pop_2010])));
+  console.log(population_2010);
   const domain = ["1912","1928","1937","1947","1954","1964","1982","1990", "2000", "2010", "2020"];
   const china_year = document.createElement("input") as HTMLInputElement;
 
