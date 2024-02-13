@@ -75,17 +75,48 @@ interface Population {
 
 async function main(): Promise<void> {
   const pop_data: Array<Population> = await d3.csv("data/Chinese_pop_province_iso.csv");
-  console.log(pop_data);
-  const china_population = new Map<number, number>();
+  // console.log(pop_data);
+  // const china_population = new Map<number, number>();
 
-  pop_data.forEach((d: { number: string, pop_2020: string }) => {
-      china_population.set(+d.number, +d.pop_2020);
-  });
-  console.log(china_population);
-  // const population_2020: Map<number, number> = new Map(pop_data.map(d => [+d.number, +d.pop_2020]));
-  // console.log(population_2020);
-  // const population_2010: Map<number, number> = new Map(pop_data.map(d => [+d.number, +d.pop_2010]));
-  // console.log(population_2010);
+  // pop_data.forEach((d: { number: string, pop_2020: string }) => {
+  //     china_population.set(+d.number, +d.pop_2020);
+  // });
+  // console.log(china_population);
+  const population_2020: Map<number, number> = new Map(pop_data.map(d => [+d.number, +d.pop_2020]));
+  console.log(population_2020);
+  const population_2010: Map<number, number> = new Map(pop_data.map(d => [+d.number, +d.pop_2010]));
+  console.log(population_2010);
+  const china_map: d3.GeoPermissibleObjects | undefined = await d3.json("data/chinamap.json");
+  const pop_raw = Plot.plot({
+    // width: 1000,
+    // height: 1000,
+    projection: {type: "mercator", domain: china_map},
+    //scale: 1000000,
+    color: {
+      type: "log",
+      n: 9,
+      domain: [3000000, 10000000, 50000000, 100000000],
+      scheme: "Reds",
+      label: "Population",
+      //scale: value => value < 10000000 ? "blues" : "reds",
+      legend: true,
+    },
+    marks: [
+      Plot.geo(china_map, Plot.centroid({
+        //fill: d => resultMap.get(d.id),
+        tip: true,
+        // channels: {
+        //   //Mandarin: d => d.id,
+        //   //English: d => translations.get(d.id)
+        //   // County: d => d.properties.name,
+        //   // State: d => statemap.get(d.id.slice(0,2)).properties.name
+        // }
+      })),
+      //Plot.geo(states, {stroke: "white"}),
+      //Plot.geo(counties, {stroke: "white"})
+    ]
+  })
+  document.querySelector("#after")?.append(pop_raw);
   const domain = ["1912","1928","1937","1947","1954","1964","1982","1990", "2000", "2010", "2020"];
   const china_year = document.createElement("input") as HTMLInputElement;
 
