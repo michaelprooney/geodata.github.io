@@ -75,10 +75,16 @@ interface Population {
 
 async function main(): Promise<void> {
   const pop_data: Array<Population> = await d3.csv("data/Chinese_pop_province_iso.csv")
-  const population_2020: Map<number, number> = new Map(pop_data.map(d => [+d.number, +d.pop_2020]));
-  console.log(population_2020);
-  const population_2010: Map<number, number> = new Map(pop_data.map(d => [+d.number, +d.pop_2010]));
-  console.log(population_2010);
+  const china_population = new Map<number, number>();
+
+  pop_data.forEach((d: { number: string, pop_2020: string }) => {
+      china_population.set(+d.number, +d.pop_2020);
+  });
+  console.log(china_population);
+  // const population_2020: Map<number, number> = new Map(pop_data.map(d => [+d.number, +d.pop_2020]));
+  // console.log(population_2020);
+  // const population_2010: Map<number, number> = new Map(pop_data.map(d => [+d.number, +d.pop_2010]));
+  // console.log(population_2010);
   const domain = ["1912","1928","1937","1947","1954","1964","1982","1990", "2000", "2010", "2020"];
   const china_year = document.createElement("input") as HTMLInputElement;
 
@@ -107,6 +113,7 @@ async function main(): Promise<void> {
   china_year.addEventListener("input", function() {
       const index = parseInt(this.value);
       valueSpan.innerHTML = domain[index];
+      console.log(valueSpan.innerHTML)
   });
 
   // Add the container to the document body or any desired parent element
