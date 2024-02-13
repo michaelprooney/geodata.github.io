@@ -74,7 +74,8 @@ interface Population {
 // }
 
 async function main(): Promise<void> {
-  const pop_data: Array<Population> = await d3.csv("data/Chinese_pop_province_iso.csv")
+  const pop_data: Array<Population> = await d3.csv("data/Chinese_pop_province_iso.csv");
+  console.log(pop_data);
   const china_population = new Map<number, number>();
 
   pop_data.forEach((d: { number: string, pop_2020: string }) => {
