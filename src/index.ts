@@ -74,9 +74,10 @@ interface Population {
 // }
 
 async function main(): Promise<void> {
-  const population_2020: Map<number, number> = new Map(((await d3.csv("data/Chinese_pop_province_iso.csv")).map(d => [+d.number, +d.pop_2020])));
+  const pop_data: Array<Population> = await d3.csv("data/Chinese_pop_province_iso.csv")
+  const population_2020: Map<number, number> = new Map(pop_data.map(d => [+d.number, +d.pop_2020]));
   console.log(population_2020);
-  const population_2010: Map<number, number> = new Map(((await d3.csv("data/Chinese_pop_province_iso.csv")).map(d => [+d.number, +d.pop_2010])));
+  const population_2010: Map<number, number> = new Map(pop_data.map(d => [+d.number, +d.pop_2010]));
   console.log(population_2010);
   const domain = ["1912","1928","1937","1947","1954","1964","1982","1990", "2000", "2010", "2020"];
   const china_year = document.createElement("input") as HTMLInputElement;
